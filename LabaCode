@@ -1,0 +1,308 @@
+	#include<SFML\System.hpp>
+	#include<SFML\Graphics.hpp>
+	#include<SFML\Audio.hpp>
+	#include<ctime>
+	#include<iostream>
+	#include <sstream>
+	#include"menu.h"
+
+	using namespace sf;
+	using namespace std;
+
+	int main() {
+		//Создание окна
+		RenderWindow window(VideoMode(1920, 1080), "If(Student){Try to stay Alive}!", Style::Fullscreen);
+		menu(window);
+		window.setFramerateLimit(60);
+		Music music;
+		//Загрузка аудио файла
+		music.openFromFile("IMG/backmusic.ogg");
+		View view;
+		Clock clock;
+		//Загрузка текстур
+		Texture t1, t2, t3, t4,t0,plate ,s1,s2,s3,s4,s5,s6,s7,pred,ment,s8,door,s9,s10,gameover,studak,point,win;
+		t0.loadFromFile("IMG/back.jpg"); s4.loadFromFile("IMG/4.png"); s10.loadFromFile("IMG/10.png"); studak.loadFromFile("IMG/studak.png");
+		t1.loadFromFile("IMG/map.png");  s5.loadFromFile("IMG/5.png"); gameover.loadFromFile("IMG/game over.png");
+		t2.loadFromFile("IMG/sprite32.png"); s6.loadFromFile("IMG/6.png"); point.loadFromFile("IMG/point.png");
+		t3.loadFromFile("IMG/sprite32-2.png"); s7.loadFromFile("IMG/7.png"); win.loadFromFile("IMG/win.png");
+		t4.loadFromFile("IMG/coffee.png"); pred.loadFromFile("IMG/pred.png"); 
+		s1.loadFromFile("IMG/1.png"); ment.loadFromFile("IMG/Ment_GaliMbIY.png");
+		s2.loadFromFile("IMG/2.png"); s8.loadFromFile("IMG/8.png");
+		s3.loadFromFile("IMG/3.png"); door.loadFromFile("IMG/door.png");
+		plate.loadFromFile("IMG/plate.png"); s9.loadFromFile("IMG/9.png");
+		//Присвоение текстур спрайтам
+		Sprite BackG(t0), Map(t1), Student(t2), Coffee(t4), Coffee2(t4),S1(s1),S2(s2),S3(s2),S4(s2),S5(s1),S6(s3),S7(s1),Plate(plate),S8(s1),S9(s8),S10(s5),S11(s5),S12(s1),S13(s6),S14(s7),Pred(pred),Pred2(pred);
+		Sprite S15(s1), Paskuda(ment), Ment(plate), Ch(s1), Door(door),TH(s1), S16(s9),S17(s1),S18(s2),S19(s10),S20(s1),S21(s2),Plate2(plate),GameOver(gameover),Studak(studak),S22(s5),Point(point),Win(win),S23(s6),S24(s1),S25(s2);
+		//Чекпоинт готу
+	start:
+		music.play();
+		//Размещение спрайтов
+		Student.setPosition(1200, 100); Door.setPosition(1601, 547); S19.setPosition(1195, 727); S24.setPosition(775,460);
+		TH.setPosition(1204, 795); S16.setPosition(1089, 0); S18.setPosition(1302, 266); S25.setPosition(1295,266);
+		S1.setPosition(1381, 564); S2.setPosition(1380, 564); Paskuda.setPosition(1325,225);
+		S3.setPosition(1910, 380); S4.setPosition(1536, 80); Ment.setPosition(1335, 265);
+		S5.setPosition(1381, 495); S6.setPosition(234, 820); Ch.setPosition(1335,313);
+		S7.setPosition(1383, 415); S8.setPosition(1380, 712); S20.setPosition(1381, 568);
+		S9.setPosition(1380, 262); Pred2.setPosition(1380, 261); S21.setPosition(1383, 564);
+		S10.setPosition(0,720); S11.setPosition(300, 0); Plate2.setPosition(1600,573);
+		S12.setPosition(1493, 53); S13.setPosition(1494, 0); Studak.setPosition(1125,95);
+		S14.setPosition(1193, 266); Pred.setPosition(1379, 313); S22.setPosition(0,660);
+		S15.setPosition(1381, 261); S17.setPosition(775, 265); S23.setPosition(190,660);
+		Student.setTextureRect(IntRect(0, 0, 32, 32));
+		//Создание переменных
+		int c = (rand() % 5 + 1);
+		float z = 0.1;
+		int offsetX = 0;
+		int offsetY = 0;
+		float frame = 1;
+		double tim = 100;
+		bool stud = false;
+		Coffee.setScale(1, 1);
+		Coffee2.setScale(1, 1);
+		Studak.setScale(1, 1);
+		Studak.setRotation(-10); 
+	
+		while (window.isOpen())
+		{
+			//Отрисовка карти игры
+			window.draw(BackG);
+			window.draw(Map);
+			float time1 = clock.getElapsedTime().asMicroseconds();
+			clock.restart();
+			time1 = time1 / 800;
+			//Ивенты(Закрытие окна , столкновения , передвижение)
+			Event event;
+		
+	
+			while (window.pollEvent(event))
+			{
+				if (event.type == Event::Closed )
+					window.close();
+				else  if ((event.type == sf::Event::KeyPressed) && ((event.key.code == sf::Keyboard::Right) || (event.key.code == sf::Keyboard::Left) || (event.key.code == sf::Keyboard::Up) || (event.key.code == sf::Keyboard::Down)) && (Student.getGlobalBounds().intersects(Plate.getGlobalBounds())))
+					window.close();
+			}
+			//Перемещение ГГ(Спрайта)
+			if (Keyboard::isKeyPressed(Keyboard::Up)) {
+				Student.move(0, -z*time1);
+				Student.setTexture(t3);
+				Student.setTextureRect(IntRect(0, 0, 32, 32));
+			}
+			if (Keyboard::isKeyPressed(Keyboard::Down)) {
+				Student.move(0, z*time1);
+				Student.setTexture(t3);
+				Student.setTextureRect(IntRect(0, 32, 32, -32));
+			}
+			if (Keyboard::isKeyPressed(Keyboard::Right)) {
+				Student.move(z*time1, 0);
+				Student.setTexture(t2);
+				Student.setTextureRect(IntRect(0 + 32, 0, -32, 32));
+			}
+			if (Keyboard::isKeyPressed(Keyboard::Left)) {
+				Student.move(-z*time1,0);
+				Student.setTexture(t2);
+				Student.setTextureRect(IntRect(0, 0, 32, 32));
+			
+			}
+			//Столкновение ГГ взаимодействие с Кофе и Охранником
+			if (Student.getGlobalBounds().intersects(Coffee.getGlobalBounds()) && Keyboard::isKeyPressed(Keyboard::E))
+			{
+				Coffee.setScale(0,0);
+				tim += 25;
+				z += 0.1;
+
+			}
+			if (Student.getGlobalBounds().intersects(Coffee2.getGlobalBounds()) && Keyboard::isKeyPressed(Keyboard::E))
+			{
+				Coffee2.setScale(0, 0);
+				tim += 25;
+				z += 0.1;
+			}
+			if (Student.getGlobalBounds().intersects(Door.getGlobalBounds()) && Keyboard::isKeyPressed(Keyboard::E))
+			{
+				Student.setPosition(1600, 600);
+			}
+			if (Student.getGlobalBounds().intersects(Plate2.getGlobalBounds()))
+			{
+				Student.setPosition(1600, 520);
+			}
+			if (Student.getGlobalBounds().intersects(Studak.getGlobalBounds()) && Keyboard::isKeyPressed(Keyboard::E))
+			{
+				stud = true;
+				Studak.setScale(0, 0);
+			}
+			if ( stud == true && Student.getGlobalBounds().intersects(Paskuda.getGlobalBounds()) && Keyboard::isKeyPressed(Keyboard::E))
+			{  
+				if (stud == true && Paskuda.getGlobalBounds().intersects(Ch.getGlobalBounds()))
+				{
+					Paskuda.move(z*time1, 0);
+					Ment.move(z*time1,0);
+				}
+				else if(stud == true)
+				{
+					Paskuda.move(0, z*time1);
+					Ment.move(0, z*time1);
+				}
+			}
+			if (Student.getGlobalBounds().intersects(S1.getGlobalBounds()) || Student.getGlobalBounds().intersects(S15.getGlobalBounds()) || Student.getGlobalBounds().intersects(S10.getGlobalBounds()) || Student.getGlobalBounds().intersects(S17.getGlobalBounds()) || Student.getGlobalBounds().intersects(Ment.getGlobalBounds()) || Student.getGlobalBounds().intersects(S6.getGlobalBounds()) || Student.getGlobalBounds().intersects(S7.getGlobalBounds()) || Student.getGlobalBounds().intersects(S8.getGlobalBounds()) || Student.getGlobalBounds().intersects(Pred.getGlobalBounds()))
+			{
+				Student.move(0, -z*time1);
+			}
+			if (Student.getGlobalBounds().intersects(S5.getGlobalBounds()) || Student.getGlobalBounds().intersects(S22.getGlobalBounds()) || Student.getGlobalBounds().intersects(S24.getGlobalBounds()) || Student.getGlobalBounds().intersects(S20.getGlobalBounds()) || Student.getGlobalBounds().intersects(S11.getGlobalBounds()) || Student.getGlobalBounds().intersects(S12.getGlobalBounds()))
+			{
+				Student.move(0, z*time1);
+			}
+			if (Student.getGlobalBounds().intersects(S14.getGlobalBounds()) || Student.getGlobalBounds().intersects(S21.getGlobalBounds()) || Student.getGlobalBounds().intersects(S23.getGlobalBounds()) || Student.getGlobalBounds().intersects(S19	.getGlobalBounds()) || Student.getGlobalBounds().intersects(S16.getGlobalBounds()) || Student.getGlobalBounds().intersects(S18.getGlobalBounds()))
+			{
+				Student.move(z*time1, 0);
+			}
+			if (Student.getGlobalBounds().intersects(S2.getGlobalBounds()) || Student.getGlobalBounds().intersects(S25.getGlobalBounds()) || Student.getGlobalBounds().intersects(S3.getGlobalBounds())  || Student.getGlobalBounds().intersects(Pred2.getGlobalBounds()) || Student.getGlobalBounds().intersects(S4.getGlobalBounds()) || Student.getGlobalBounds().intersects(S9.getGlobalBounds()) || Student.getGlobalBounds().intersects(S13.getGlobalBounds()))
+			{
+				Student.move(-z*time1,0);
+			}
+			//Условие для отчета силы Кофе
+			if (Student.getGlobalBounds().intersects(Map.getGlobalBounds()))
+			{
+				if (tim < 0.00000001)
+				{
+					tim = 0;
+				}
+				else
+				tim -= 0.1;
+			}
+			//Работа с текстом
+			Text text;
+			Text Frm;
+			Font font;
+			Font classic;
+			font.loadFromFile("IMG/11000.ttf");
+			text.setFont(font); 
+			classic.loadFromFile("IMG/times.ttf");
+			ostringstream Frame;
+			Frame << tim ;
+			Frm.setFont(classic);
+			Frm.setPosition(250, 1);
+			Frm.setCharacterSize(50);
+			Frm.setString(" " + Frame.str());
+			text.setString("Coffee power "); 
+			text.setCharacterSize(50);
+			text.setStyle(sf::Text::Bold | sf::Text::Underlined);
+			Frm.setStyle(sf::Text::Bold | sf::Text::Underlined);
+			text.setPosition(0,0);
+			Text nure("Made by Vlad Sapega", font, 50);
+			Text rip("Damn, Snova someone ne zadonatil to Meshkov...", font,35);
+			Text Home("Damn, Snova someone ne zadonatil to Meshkov...", font, 35);
+			rip.setStyle(sf::Text::Bold | sf::Text::Underlined);
+			nure.setPosition(0, 50);
+			rip.setPosition(1210, 740);
+			//Пасхалка
+			if (Student.getGlobalBounds().intersects(TH.getGlobalBounds()))
+			{
+				window.draw(rip);
+			}
+			//Отрисовка элементов спрайтов и вывод текста
+			window.draw(Studak);
+			window.draw(Student);
+			window.draw(Door);
+			window.draw(Paskuda);
+			window.draw(nure);
+			window.draw(Frm);
+			window.draw(text);	
+			//Рандомный спавн Кофе
+			switch (c)
+			{
+			case 1:
+			{
+				Coffee.setPosition(1205, 22);
+				window.draw(Coffee);
+				Coffee2.setPosition(1862, 613);
+				window.draw(Coffee2);
+				Point.setPosition(786, 618);
+				Plate.setPosition(795, 669);
+				window.draw(Point);
+				break;
+			}
+			case 2:
+			{
+				Coffee.setPosition(1209, 476);
+				window.draw(Coffee);
+				Coffee2.setPosition(1452, 22);
+				window.draw(Coffee2);
+				Point.setPosition(1859, 464);
+				Plate.setPosition(1868, 515);
+				window.draw(Point);
+				break;
+			}
+			case 3:
+			{
+				Coffee.setPosition(1209, 476);
+				window.draw(Coffee);
+				Coffee2.setPosition(1862, 613);
+				window.draw(Coffee2);
+				Point.setPosition(1859, 464);
+				Plate.setPosition(1868, 515);
+				window.draw(Point);
+				break;
+			}
+			case 4:
+			{
+				Coffee.setPosition(1209, 476);
+				window.draw(Coffee);
+				Coffee2.setPosition(1862, 613);
+				window.draw(Coffee2);
+				Point.setPosition(498, 620);
+				Plate.setPosition(507, 671);
+				window.draw(Point);
+				break;
+			}
+			case 5:
+			{
+				Coffee.setPosition(1205, 22);
+				window.draw(Coffee);
+				Coffee2.setPosition(1452, 22);
+				window.draw(Coffee2);
+				Point.setPosition(786, 618);
+				Plate.setPosition(795, 669);
+				window.draw(Point);
+				break;
+			}
+			}
+			//Условие для проигрыша по времени и для победы 
+			if (Student.getGlobalBounds().intersects(Plate.getGlobalBounds()))
+			{
+				window.draw(Win);
+			}
+			else if (Student.getGlobalBounds().intersects(Map.getGlobalBounds()))
+			{
+				if (tim < 0.00000001)
+				{
+					tim = 0;
+					window.draw(GameOver);
+
+				}
+				else
+					//Условие для отчета силы Кофе
+					tim -= 0.00001; 
+					z -= 0.0001;
+			}
+			//Охраник
+			if (Student.getGlobalBounds().intersects(Paskuda.getGlobalBounds()) && stud == false)
+			{
+				Text Debil("Where is tvoy propusk, homie?!", font, 35);
+				Debil.setStyle(sf::Text::Bold | sf::Text::Underlined);
+				Debil.setPosition(1175, 185);
+				Debil.setFillColor(Color::Black);
+				window.draw(Debil);	
+			}
+			//Вывод на экран
+			window.display();
+			//Присвоение кнопки для закрытия окна
+			if (Keyboard::isKeyPressed(Keyboard::Escape))
+				window.close();
+			//Присвоение кнопки для рестарта игры, отправка к чекпоинту старт
+			if (Keyboard::isKeyPressed(Keyboard::R)) {
+				window.clear();
+				goto start;
+			}
+		}
+		return 0;
+	}
